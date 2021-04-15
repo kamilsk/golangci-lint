@@ -501,6 +501,10 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithSince("v1.40.0").
 			WithPresets(linter.PresetStyle).
 			WithURL("https://github.com/ldez/tagliatelle"),
+		linter.NewConfig(golinters.NewLoopPointer()).
+			WithSince("v1.40.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/kyoh86/looppointer"),
 		linter.NewConfig(golinters.NewErrName()).
 			WithPresets(linter.PresetStyle).
 			WithLoadForGoAnalysis().
