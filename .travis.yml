@@ -1,0 +1,34 @@
+language: go
+os: linux
+
+cache:
+  directories:
+    - "$HOME/.cache/go-build"
+    - "$HOME/gopath/pkg/mod"
+
+env:
+  global:
+    - GO111MODULE=on
+
+go:
+  - master
+  - 1.x
+  - 1.16.x
+
+before_script:
+  - make env
+
+script:
+  - make build
+
+deploy:
+  - provider: script
+    cleanup: false
+    script: curl -sL https://git.io/goreleaser | bash -s -- --release-notes=CHANGES.md
+    on:
+      tags: true
+      condition: $TRAVIS_GO_VERSION == 1.16* && $TRAVIS_TAG != looppointer
+
+notifications:
+  slack:
+    secure: ZVTs3TKKO5TsVEZfNzV558ziB+mMmQJzrPEgDfbW9cCdS0fskRqEs2d2bGHWvAQ7JfBTA+MLpM09BhG8A+tz5MdKaHSINZeAP9PKmGbfnfdenwndRQevNJvDabKVZ3XOpkITWIEM8lfjlantQckxM9mXNLS7pFAC8yOsooQca70sortsqgUYzjrpE3RmpUa3iwoZuvtXaWTX0Nk3shaa413N/zHa0eB/SZie+ccN68NJI5yj7YnA6q60VuYTiVLrqJED13X8ypw7i+dJuLw3e4+3n06IqJbgHyNW+V/K1Bvc6fB46CPzfwZj/QNpsPlx0ade75MbpjW6wuUX4Zm6C3UOFOHPeQ5S1Wb58f0Rbd5b9GrR78GmlkPSConrWoiseZIOmhVrNL+SwIQOi/cSq1RrmxXbjQT0AaoDcwIj7ooELfCss6MI6yU4UsZeV09lNozBwmG2reCybEVr/ZFMACizyudztPzxqo3PTHxv3AI4DwkXDZCCmf87WCDyydDg8weQ7YEkKeuY1NHI6qsHa3U7MPmJPNWOZJSQKRDcmbyFPPS6DRm1U/YIzbu12QvcD1bHBNbqJP9kXZhvbcNCOuLi52DCO49vnpfKMEkLRm6xWbaOCbDqmBBtz37mVT+lSOjc+xDjS6INXTKE5U+jr546B0Xfa9PB/CYK3e/SdAo=
