@@ -171,5 +171,6 @@ require github.com/hashicorp/go-version v1.4.0
 
 require (
 	github.com/hexops/gotextdiff v1.0.3 // indirect
+	github.com/kyoh86/nolint v0.0.0-20200711045849-7a7b0d649b7a // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 )
