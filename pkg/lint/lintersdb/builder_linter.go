@@ -26,6 +26,11 @@ func (b LinterBuilder) Build(cfg *config.Config) ([]*linter.Config, error) {
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	return []*linter.Config{
+		linter.NewConfig(golinters.NewLoopPointer()).
+			WithSince("v1.40.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/kyoh86/looppointer"),
+
 		linter.NewConfig(golinters.NewAsasalint(&cfg.LintersSettings.Asasalint)).
 			WithSince("1.47.0").
 			WithPresets(linter.PresetBugs).
