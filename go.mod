@@ -56,6 +56,7 @@ require (
 	github.com/kulti/thelper v0.6.3
 	github.com/kunwardeep/paralleltest v1.0.6
 	github.com/kyoh86/exportloopref v0.1.8
+	github.com/kyoh86/looppointer v0.1.10
 	github.com/ldez/gomoddirectives v0.2.3
 	github.com/ldez/tagliatelle v0.3.1
 	github.com/leonklingele/grouper v1.1.0
@@ -107,7 +108,7 @@ require (
 	github.com/yagipy/maintidx v1.0.0
 	github.com/yeya24/promlinter v0.2.0
 	gitlab.com/bosi/decorder v0.2.3
-	golang.org/x/tools v0.1.12
+	golang.org/x/tools v0.2.0
 	gopkg.in/yaml.v3 v3.0.1
 	honnef.co/go/tools v0.3.3
 	mvdan.cc/gofumpt v0.4.0
@@ -141,6 +142,7 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/kisielk/gotool v1.0.0 // indirect
+	github.com/kyoh86/nolint v0.0.1 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
@@ -177,10 +179,10 @@ require (
 	go.uber.org/zap v1.17.0 // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/exp/typeparams v0.0.0-20220827204233-334a2380cb91 // indirect
-	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
+	golang.org/x/mod v0.6.0 // indirect
 	golang.org/x/sync v0.0.0-20220819030929-7fc1605a5dde // indirect
-	golang.org/x/sys v0.0.0-20220915200043-7b5979e65e41 // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/text v0.4.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
