@@ -488,6 +488,10 @@ github.com/kunwardeep/paralleltest v1.0.3/go.mod h1:vLydzomDFpk7yu5UX02RmP0H8QfR
 github.com/kylelemons/godebug v1.1.0/go.mod h1:9/0rRGxNHcop5bhtWyNeEfOS8JIWk580+fNqagV/RAw=
 github.com/kyoh86/exportloopref v0.1.8 h1:5Ry/at+eFdkX9Vsdw3qU4YkvGtzuVfzT4X7S77LoN/M=
 github.com/kyoh86/exportloopref v0.1.8/go.mod h1:1tUcJeiioIs7VWe5gcOObrux3lb66+sBqGZrRkMwPgg=
+github.com/kyoh86/looppointer v0.1.7 h1:q5sZOhFvmvQ6ZoZxvPB/Mjj2croWX7L49BBuI4XQWCM=
+github.com/kyoh86/looppointer v0.1.7/go.mod h1:l0cRF49N6xDPx8IuBGC/imZo8Yn1BBLJY0vzI+4fepc=
+github.com/kyoh86/nolint v0.0.0-20200711045849-7a7b0d649b7a h1:WKwgzTn8xp2JuhOUsTbi+h+QygLZSfVGwaYZUejGMMw=
+github.com/kyoh86/nolint v0.0.0-20200711045849-7a7b0d649b7a/go.mod h1:hPeUNhNOZ22wXzQKMzeYKXVFTBjJ9czxjeIDyI1ueVM=
 github.com/ldez/gomoddirectives v0.2.2 h1:p9/sXuNFArS2RLc+UpYZSI4KQwGMEDWC/LbtF5OPFVg=
 github.com/ldez/gomoddirectives v0.2.2/go.mod h1:cpgBogWITnCfRq2qGoDkKMEVSaarhdBr6g8G04uz6d0=
 github.com/ldez/tagliatelle v0.3.1 h1:3BqVVlReVUZwafJUwQ+oxbx2BEX2vUG4Yu/NOfMiKiM=
@@ -1161,6 +1165,7 @@ golang.org/x/tools v0.0.0-20200625211823-6506e20df31f/go.mod h1:EkVYQZoAsY45+roY
 golang.org/x/tools v0.0.0-20200626171337-aa94e735be7f/go.mod h1:EkVYQZoAsY45+roYkvgYkIh4xh/qjgUK9TdY2XT94GE=
 golang.org/x/tools v0.0.0-20200630154851-b2d8b0336632/go.mod h1:EkVYQZoAsY45+roYkvgYkIh4xh/qjgUK9TdY2XT94GE=
 golang.org/x/tools v0.0.0-20200706234117-b22de6825cf7/go.mod h1:njjCfa9FT2d7l9Bc6FUM5FLjQPp3cFF28FI3qnDFljA=
+golang.org/x/tools v0.0.0-20200710042808-f1c4188a97a1/go.mod h1:njjCfa9FT2d7l9Bc6FUM5FLjQPp3cFF28FI3qnDFljA=
 golang.org/x/tools v0.0.0-20200724022722-7017fd6b1305/go.mod h1:njjCfa9FT2d7l9Bc6FUM5FLjQPp3cFF28FI3qnDFljA=
 golang.org/x/tools v0.0.0-20200729194436-6467de6f59a7/go.mod h1:njjCfa9FT2d7l9Bc6FUM5FLjQPp3cFF28FI3qnDFljA=
 golang.org/x/tools v0.0.0-20200804011535-6c149bb5ef0d/go.mod h1:njjCfa9FT2d7l9Bc6FUM5FLjQPp3cFF28FI3qnDFljA=
