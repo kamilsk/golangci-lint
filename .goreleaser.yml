@@ -1,83 +1,30 @@
 ---
 project_name: golangci-lint
 
-release:
-  github:
-    owner: golangci
-    name: golangci-lint
-
-builds:
-  - binary: golangci-lint
-    goos:
-      - darwin
-      - windows
-      - linux
-      - freebsd
-    goarch:
-      - amd64
-      - arm64
-      - arm
-      - 386
-      - ppc64le
-      - s390x
-      - mips64
-      - mips64le
-      - riscv64
-    goarm:
-      - 6
-      - 7
-    gomips:
-      - hardfloat
-    env:
-      - CGO_ENABLED=0
-    ignore:
-      - goos: darwin
-        goarch: 386
-      - goos: freebsd
-        goarch: arm64
-    main: ./cmd/golangci-lint/
-    flags:
-      - -trimpath
-    ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
-
 archives:
-  - format: tar.gz
-    wrap_in_directory: true
-    format_overrides:
-      - goos: windows
-        format: zip
-    name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+  - id: golangci-lint
     files:
       - LICENSE
-      - README.md
-
-snapshot:
-  name_template: SNAPSHOT-{{ .Commit }}
-
-checksum:
-  name_template: '{{ .ProjectName }}-{{ .Version }}-checksums.txt'
-
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '(?i)^docs?:'
-      - '(?i)^docs\([^:]+\):'
-      - '(?i)^docs\[[^:]+\]:'
-      - '^tests?:'
-      - '(?i)^dev:'
-      - '^build\(deps\): bump .* in /docs \(#\d+\)'
-      - '^build\(deps\): bump .* in /\.github/peril \(#\d+\)'
-      - Merge pull request
-      - Merge branch
+    format: tar.gz
+    name_template: "{{.Binary}}_{{.Version}}_{{.Os}}-{{.Arch}}"
+    replacements:
+      amd64: 64bit_x86
+      arm64: 64bit_arm
+      darwin: macOS
+      linux: Linux
 
 brews:
-  - tap:
-      owner: golangci
-      name: homebrew-tap
-    folder: Formula
-    homepage: https://golangci.com
+  - name: golangci-lint
+    caveats: ''
+    commit_author:
+      name: Kamil Samigullin
+      email: kamil@samigullin.info
     description: Fast linters runner for Go.
+    folder: Formula
+    homepage: https://github.com/kamilsk/golangci-lint
+    tap:
+      owner: kamilsk
+      name: homebrew-tap
     install: |
       bin.install "golangci-lint"
       output = Utils.popen_read("#{bin}/golangci-lint completion bash")
@@ -88,17 +35,28 @@ brews:
       (fish_completion/"eksctl.fish").write output
       prefix.install_metafiles
     test: |
-      system "#{bin}/golangci-lint --version"
+      system "#{bin}/golangci-lint help"
 
-nfpms:
-  -
-    id: golangci-lint-nfpms
-    package_name: golangci-lint
-    file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    homepage: https://golangci-lint.run/
-    maintainer: "golangci-lint Team <golangci-releaser@users.noreply.github.com>"
-    description: Fast linters Runner for Go
-    license: GPLv3
-    formats:
-      - deb
-      - rpm
+builds:
+  - id: golangci-lint
+    binary: golangci-lint
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    goarch:
+      - amd64
+      - arm64
+    goos:
+      - darwin
+      - linux
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+    main: ./cmd/golangci-lint
+
+checksum: { name_template: checksums.txt }
+
+release:
+  github:
+    owner: kamilsk
+    name: golangci-lint
