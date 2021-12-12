@@ -1,3 +1,9 @@
+# goreleaser artifacts
+/dist/
+
+# code coverage and quality reports
+*.out
+
 *.test
 .DS_Store
 /*.pdf

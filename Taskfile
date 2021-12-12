@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+declare -A config
+config['branch']=extended
+config['reason']=looppointer
+config['target']=upstream/master
+config['dryrun']=false
+config['source']=https://github.com/kamilsk/golangci-lint/releases
+
+declare -A remotes
+remotes['upstream']=git@github.com:golangci/golangci-lint.git
+remotes['origin']=git@github.com:kamilsk/golangci-lint.git
+
+function check() {
+  [ "$(git rev-parse --abbrev-ref HEAD)" == "${config['branch']}" ]
+}
+
+function clean() {
+  # we have to delete remote branches
+  git branch -a | grep remotes/ |
+    # except upstream' branches,
+    grep -v remotes/upstream |
+    # the current and dependabot's
+    grep -vE /${config['branch']}\|/dependabot/ |
+    # clean-up and separate remote and branch names
+    sed 's|remotes/||g' |
+    sed 's|/| |' |
+    # bat -P && return | # debug pipe before deleting branches
+    prune || true
+
+  # we have to delete useless tags
+  git tag --list |
+    # exclude valid semver tags
+    grep -v '^v[0-9]' |
+    # exclude current version
+    grep -v "$(version)" |
+    # bat -P && return | # debug pipe before deleting tags
+    untag || true
+}
+
+function fetch() {
+  for remote in "${!remotes[@]}"; do
+    __run git fetch "${remote}" --force --prune --tags
+  done
+}
+
+function prune() {
+  local remote branch
+  while read -r remote branch; do
+    __run git push -d "${remote}" "${branch}"
+  done
+}
+
+function setup() {
+  for remote in $(git remote -v | awk '{print $1}' | sort | uniq); do
+    __run git remote rm "${remote}"
+  done
+
+  for remote in "${!remotes[@]}"; do
+    __run git remote add "${remote}" "${remotes[$remote]}"
+  done
+}
+
+function untag() {
+  local tag
+  while read -r tag; do
+    __run git tag -d "${tag}" || true
+    for remote in $(git remote | grep -v upstream); do
+      __run git push "${remote}" :refs/tags/"${tag}" || true
+    done
+  done
+}
+
+function publish() {
+  __run goreleaser --release-notes CHANGES.md --rm-dist
+}
+
+function release() {
+  check
+  fetch
+  clean
+
+  # define the release version: passed or latest,
+  # and it's commit to creating the new tag on it
+  local version=${1:-} latest
+  latest=$(version raw)
+  case "${version}" in
+  '' | latest)
+    version=$(git tag -l 'v[0-9]*' --sort=-committerdate | head -1)
+    ;;
+  esac
+  if [ "${version}" = "${latest}" ]; then
+    echo nothing to sync with "${version}" version
+    return 1
+  fi
+  local fork
+  fork=$(git merge-base --fork-point "${version}" 2>/dev/null || git rev-list -n1 "${version}")
+
+  # prepare release
+  __run git rebase --onto "${version}" "${config['target']}"
+  untag <<<"${version}"
+  __run git tag -m "'sync with upstream'" "${version}"
+  untag <<<"${config['reason']}"
+  __run git tag -m "'extend by ${config['reason']}'" "${config['reason']}" "${fork}"
+
+  # do release
+  for remote in $(git remote | grep -v upstream); do
+    __run git push --force-with-lease "${remote}" "${config['branch']}"
+    __run git push "${remote}" "refs/tags/${config['reason']}"
+    __run git push "${remote}" "refs/tags/${version}"
+  done
+  publish
+  __run open ${config['source']}
+}
+
+function version() {
+  if [ "${1:-}" = 'raw' ]; then
+    git describe --tags --always
+    return $?
+  fi
+  git describe --tags | rev | cut -d - -f3- | rev
+}
+
+function debug() { echo "${@}"; }
+function error() { echo "${@}" >&2; }
+function fatal() { error "${@}" && exit 1; }
+function usage() {
+  cat - <<EOF
+Usage: $0 <task> <args>
+Tasks:
+EOF
+  compgen -A function | grep -v '^__' | sort | cat -n
+}
+
+__run() {
+  if ${config['dryrun']}; then
+    echo "${@}"
+  else
+    trap 'echo "${@}"' ERR
+    "${@}"
+  fi
+}
+
+args=()
+while [[ $# -gt 0 ]]; do
+  case "${1}" in
+  -d | --dry-run)
+    config['dryrun']=true
+    shift
+    ;;
+  *)
+    args+=("${1}")
+    shift
+    ;;
+  esac
+done
+set -- "${args[@]}"
+"${@:-usage}"
