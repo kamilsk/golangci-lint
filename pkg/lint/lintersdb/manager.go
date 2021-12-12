@@ -913,6 +913,14 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 			WithURL("https://github.com/ykadowak/zerologlint"),
 	}
 
+	// separated to minimize merge conflicts while rebasing
+	lcs = append(lcs,
+		linter.NewConfig(golinters.NewLoopPointer()).
+			WithSince("v1.40.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/kyoh86/looppointer"),
+	)
+
 	enabledByDefault := map[string]bool{
 		golinters.NewGovet(nil).Name():                  true,
 		golinters.NewErrcheck(errcheckCfg).Name():       true,
