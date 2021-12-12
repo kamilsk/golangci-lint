@@ -264,6 +264,11 @@ func (m Manager) GetAllSupportedLinterConfigs() []*linter.Config {
 	// The linters are sorted in the alphabetical order (case-insensitive).
 	// When a new linter is added the version in `WithSince(...)` must be the next minor version of golangci-lint.
 	linters = append(linters,
+		linter.NewConfig(golinters.NewLoopPointer()).
+			WithSince("v1.40.0").
+			WithPresets(linter.PresetBugs).
+			WithURL("https://github.com/kyoh86/looppointer"),
+
 		linter.NewConfig(golinters.NewAsasalint(asasalintCfg)).
 			WithSince("1.47.0").
 			WithPresets(linter.PresetBugs).
