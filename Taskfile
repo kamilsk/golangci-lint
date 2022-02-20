@@ -51,7 +51,7 @@ function sync() {
   fi
 
   git rebase --onto "${version}" "${upstream}"
-  fork=$(git merge-base --fork-point "${version}")
+  fork=$(git merge-base --fork-point "${version}" 2>/dev/null || git rev-list -n1 "${version}")
   git untag "${version}"
   git untag "${reason}"
 

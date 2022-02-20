@@ -20,9 +20,9 @@ linters:
 ## What's changed
 
 - The `golangci-lint` supports the `looppointer` linter.
-- The package is available by `brew install kamilsk/tap/golangci-lint`.
+- The tool is available by `brew install kamilsk/tap/golangci-lint`.
 - The installation is also possible by
-  `curl -sSfL https://raw.githubusercontent.com/kamilsk/golangci-lint/extended/bin/install | sh -s -- -b /usr/local/bin`
+  `curl -sSfL https://raw.githubusercontent.com/kamilsk/golangci-lint/extended/bin/install | sh -s -- -b /usr/local/bin`.
 
 <!-- references -->
 
