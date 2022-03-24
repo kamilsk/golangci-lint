@@ -69,7 +69,7 @@ require (
 	github.com/ryancurrah/gomodguard v1.2.3
 	github.com/ryanrolds/sqlclosecheck v0.3.0
 	github.com/sanposhiho/wastedassign/v2 v2.0.6
-	github.com/securego/gosec/v2 v2.10.0
+	github.com/securego/gosec/v2 v2.11.0
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c
 	github.com/shirou/gopsutil/v3 v3.22.2
 	github.com/sirupsen/logrus v1.8.1
@@ -171,5 +171,6 @@ require github.com/hashicorp/go-version v1.2.1
 
 require (
 	github.com/hexops/gotextdiff v1.0.3 // indirect
+	github.com/kyoh86/nolint v0.0.0-20200711045849-7a7b0d649b7a // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 )
