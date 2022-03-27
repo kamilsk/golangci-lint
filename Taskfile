@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
-set -o nounset
-set -o pipefail
+set -euo pipefail
 
 function clean() {
   git fetch upstream --force --prune --tags
@@ -59,7 +57,7 @@ function sync() {
   git tag "${reason}" "${fork}"
 
   git please
-  git push --tags
+  git push --follow-tags
   publish
   open https://github.com/kamilsk/golangci-lint/releases
 }
