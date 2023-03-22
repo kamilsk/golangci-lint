@@ -2,6 +2,7 @@ package config
 
 const (
 	OutFormatJSON              = "json"
+	OutFormatYAML              = "yaml"
 	OutFormatLineNumber        = "line-number"
 	OutFormatColoredLineNumber = "colored-line-number"
 	OutFormatTab               = "tab"
