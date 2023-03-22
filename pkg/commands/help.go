@@ -1,13 +1,16 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v3"
 
+	"github.com/golangci/golangci-lint/pkg/config"
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
 	"github.com/golangci/golangci-lint/pkg/logutils"
 )
@@ -33,10 +36,39 @@ func (e *Executor) initHelp() {
 	helpCmd.AddCommand(lintersHelpCmd)
 }
 
-func printLinterConfigs(lcs []*linter.Config) {
+func printLinterConfigs(lcs []*linter.Config, format ...string) {
 	sort.Slice(lcs, func(i, j int) bool {
 		return lcs[i].Name() < lcs[j].Name()
 	})
+
+	var f string
+	if len(format) > 0 {
+		f = format[0]
+
+		type l struct {
+			Name           string `json:"name" yaml:"name"`
+			Desc           string `json:"desc" yaml:"desc"`
+			*linter.Config `json:",inline" yaml:",inline"`
+		}
+		converted := make([]l, 0, len(lcs))
+		for _, lc := range lcs {
+			converted = append(converted, l{
+				Name:   lc.Name(),
+				Desc:   lc.Linter.Desc(),
+				Config: lc,
+			})
+		}
+
+		switch f {
+		case config.OutFormatJSON:
+			_ = json.NewEncoder(logutils.StdOut).Encode(converted)
+			return
+		case config.OutFormatYAML:
+			_ = yaml.NewEncoder(logutils.StdOut).Encode(converted)
+			return
+		}
+	}
+
 	for _, lc := range lcs {
 		altNamesStr := ""
 		if len(lc.AlternativeNames) != 0 {
@@ -55,7 +87,8 @@ func printLinterConfigs(lcs []*linter.Config) {
 			deprecatedMark = " [" + color.RedString("deprecated") + "]"
 		}
 
-		fmt.Fprintf(logutils.StdOut, "%s%s%s: %s [fast: %t, auto-fix: %t]\n", color.YellowString(lc.Name()),
+		_, _ = fmt.Fprintf(logutils.StdOut, "%s%s%s: %s [fast: %t, auto-fix: %t]\n",
+			color.YellowString(lc.Name()),
 			altNamesStr, deprecatedMark, linterDescription, !lc.IsSlowLinter(), lc.CanAutoFix)
 	}
 }
@@ -70,12 +103,13 @@ func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
 		}
 	}
 
-	color.Green("Enabled by default linters:\n")
+	green("Enabled by default linters:\n")
 	printLinterConfigs(enabledLCs)
-	color.Red("\nDisabled by default linters:\n")
+
+	red("\nDisabled by default linters:\n")
 	printLinterConfigs(disabledLCs)
 
-	color.Green("\nLinters presets:")
+	green("\nLinters presets:")
 	for _, p := range e.DBManager.AllPresets() {
 		linters := e.DBManager.GetAllLinterConfigsForPreset(p)
 		linterNames := make([]string, 0, len(linters))
@@ -83,6 +117,7 @@ func (e *Executor) executeLintersHelp(_ *cobra.Command, _ []string) {
 			linterNames = append(linterNames, lc.Name())
 		}
 		sort.Strings(linterNames)
-		fmt.Fprintf(logutils.StdOut, "%s: %s\n", color.YellowString(p), strings.Join(linterNames, ", "))
+		_, _ = fmt.Fprintf(logutils.StdOut, "%s: %s\n",
+			color.YellowString(p), strings.Join(linterNames, ", "))
 	}
 }
