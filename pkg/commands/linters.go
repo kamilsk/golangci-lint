@@ -3,7 +3,6 @@ package commands
 import (
 	"fmt"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 
 	"github.com/golangci/golangci-lint/pkg/lint/linter"
@@ -28,12 +27,12 @@ func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
 		return fmt.Errorf("can't get enabled linters: %w", err)
 	}
 
-	color.Green("Enabled by your configuration linters:\n")
+	green("Enabled by your configuration linters:\n")
 	enabledLinters := make([]*linter.Config, 0, len(enabledLintersMap))
-	for _, linter := range enabledLintersMap {
-		enabledLinters = append(enabledLinters, linter)
+	for _, l := range enabledLintersMap {
+		enabledLinters = append(enabledLinters, l)
 	}
-	printLinterConfigs(enabledLinters)
+	printLinterConfigs(enabledLinters, e.cfg.Output.Format)
 
 	var disabledLCs []*linter.Config
 	for _, lc := range e.DBManager.GetAllSupportedLinterConfigs() {
@@ -42,8 +41,8 @@ func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
 		}
 	}
 
-	color.Red("\nDisabled by your configuration linters:\n")
-	printLinterConfigs(disabledLCs)
+	red("\nDisabled by your configuration linters:\n")
+	printLinterConfigs(disabledLCs, e.cfg.Output.Format)
 
 	return nil
 }
