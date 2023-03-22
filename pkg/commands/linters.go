@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
@@ -63,10 +62,10 @@ func (e *Executor) executeLinters(_ *cobra.Command, _ []string) error {
 		}
 	}
 
-	color.Green("Enabled by your configuration linters:\n")
-	printLinterConfigs(enabledLinters)
-	color.Red("\nDisabled by your configuration linters:\n")
-	printLinterConfigs(disabledLCs)
+	green("Enabled by your configuration linters:\n")
+	printLinterConfigs(enabledLinters, e.cfg.Output.Format)
+	red("\nDisabled by your configuration linters:\n")
+	printLinterConfigs(disabledLCs, e.cfg.Output.Format)
 
 	return nil
 }
