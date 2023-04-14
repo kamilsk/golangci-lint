@@ -182,7 +182,7 @@ function release() {
     + git tag -d "${tag}"
     for remote in $(git remote | grep -v upstream); do
       echo "${tags[${remote}]}" | grep -q "^${tag}$" || continue
-      + git push "${remote}" :refs/tags/"${tag}"
+      _ git push "${remote}" :refs/tags/"${tag}"
     done
   done
 }
